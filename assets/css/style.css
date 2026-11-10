@@ -1,0 +1,1153 @@
+
+/* ============================================================
+   1. DESIGN TOKENS
+   ============================================================ */
+:root {
+    /* ---- Brand Colors (from MPC logo) ---- */
+    --mpc-navy:        #1B2A6B;
+    --mpc-navy-dark:   #141F52;
+    --mpc-blue:        #4DA6E8;
+    --mpc-blue-dark:   #2C7FC9;
+    --mpc-blue-soft:   #E0F2FE;
+    --mpc-flame:       #F59E0B;
+    --mpc-flame-dark:  #B45309;
+    --mpc-red:         #DC2626;
+    --mpc-red-dark:    #B91C1C;
+
+    /* ---- Feedback Colors ---- */
+    --mpc-success:     #16A34A;
+    --mpc-success-dark:#15803D;
+    --mpc-warning:     #D97706;
+    --mpc-info:        #0891B2;
+
+    /* ---- Neutral Colors ---- */
+    --mpc-bg:          #F4F7FC;
+    --mpc-card-bg:     #FFFFFF;
+    --mpc-text:        #1F2937;
+    --mpc-muted:       #6B7280;
+    --mpc-border:      #E5E7EB;
+    --mpc-border-strong:#D1D5DB;
+
+    /* ---- Typography ---- */
+    --font-ethiopic:   'Noto Sans Ethiopic', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono:       ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
+
+    /* ---- Border Radius ---- */
+    --radius-xs:       4px;
+    --radius-sm:       6px;
+    --radius-md:       10px;
+    --radius-lg:       16px;
+    --radius-xl:       24px;
+    --radius-full:     9999px;
+
+    /* ---- Shadows ---- */
+    --shadow-xs:       0 1px 2px rgba(27, 42, 107, 0.05);
+    --shadow-sm:       0 1px 3px rgba(27, 42, 107, 0.08), 0 1px 2px rgba(27, 42, 107, 0.04);
+    --shadow-md:       0 4px 12px rgba(27, 42, 107, 0.10);
+    --shadow-lg:       0 10px 25px rgba(27, 42, 107, 0.15);
+    --shadow-xl:       0 20px 40px rgba(27, 42, 107, 0.20);
+
+    /* ---- Transitions ---- */
+    --t-fast:          150ms ease;
+    --t-base:          200ms ease;
+    --t-slow:          300ms ease;
+}
+
+
+/* ============================================================
+   2. RESET & BASE
+   ============================================================ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--font-ethiopic);
+    background-color: var(--mpc-bg);
+    color: var(--mpc-text);
+    line-height: 1.6;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+}
+
+img,
+svg,
+video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+button {
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--mpc-border);
+    margin: 20px 0;
+}
+
+code,
+kbd,
+samp {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    padding: 2px 6px;
+    background: #F3F4F6;
+    border-radius: var(--radius-xs);
+    color: var(--mpc-navy);
+}
+
+::selection {
+    background: var(--mpc-blue);
+    color: #fff;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+
+/* ============================================================
+   3. TYPOGRAPHY
+   ============================================================ */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--mpc-navy);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 8px;
+}
+
+h1 { font-size: 26px; margin-bottom: 15px; }
+h2 { font-size: 20px; margin-bottom: 12px; }
+h3 { font-size: 16px; margin-bottom: 8px; }
+h4 { font-size: 15px; }
+h5 { font-size: 14px; }
+h6 { font-size: 13px; }
+
+p { margin-bottom: 12px; }
+p:last-child { margin-bottom: 0; }
+
+a {
+    color: var(--mpc-blue);
+    text-decoration: none;
+    transition: color var(--t-fast);
+}
+a:hover { color: var(--mpc-navy); }
+
+a:focus-visible {
+    outline: 2px solid var(--mpc-blue);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+strong, b { font-weight: 700; }
+em, i { font-style: italic; }
+small { font-size: 0.85em; }
+
+
+/* ============================================================
+   4. LAYOUT & GRID
+   ============================================================ */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.grid {
+    display: grid;
+    gap: 20px;
+}
+
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* Vertical stack — used by <form class="stack"> */
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+@media (max-width: 992px) {
+    .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .grid-2,
+    .grid-3,
+    .grid-4 { grid-template-columns: 1fr; }
+    .container { padding: 0 15px; }
+}
+
+/* Standard page header pattern */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+.page-header h1 { margin: 0; }
+.page-header .page-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Standard page container */
+.page-container {
+    max-width: 1180px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+@media (max-width: 768px) {
+    .page-container { margin: 20px auto; padding: 0 15px; }
+}
+
+
+/* ============================================================
+   5. CARDS
+   ============================================================ */
+.card {
+    background: var(--mpc-card-bg);
+    border: 1px solid var(--mpc-border);
+    border-left: 4px solid var(--mpc-blue);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--t-base);
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.card:last-child { margin-bottom: 0; }
+
+/* Card Color Variants (change the left accent stripe) */
+.card-navy    { border-left-color: var(--mpc-navy); }
+.card-flame   { border-left-color: var(--mpc-flame); }
+.card-red     { border-left-color: var(--mpc-red); }
+.card-success { border-left-color: var(--mpc-success); }
+.card-warning { border-left-color: var(--mpc-warning); }
+.card-info    { border-left-color: var(--mpc-info); }
+
+/* Card without colored left stripe */
+.card-plain {
+    border-left: 1px solid var(--mpc-border);
+}
+
+/* Card that behaves like a clickable tile */
+.card-hover {
+    cursor: pointer;
+}
+.card-hover:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+/* Card with no inner padding (for tables that fill it) */
+.card-compact {
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Login page / future auth card — base styles */
+.auth-card {
+    background: var(--mpc-card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 40px;
+    max-width: 440px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    border-top: none;
+}
+
+.auth-card .logo-big {
+    display: block;
+    margin: 0 auto 20px;
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(27, 42, 107, 0.25));
+}
+
+
+/* ============================================================
+   6. FORMS & INPUTS
+   ============================================================ */
+.form-group {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--mpc-navy);
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+label span.en {
+    display: block;
+    font-size: 11px;
+    color: var(--mpc-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px 15px;
+    font-family: var(--font-ethiopic);
+    font-size: 14px;
+    color: var(--mpc-text);
+    background: #fff;
+    border: 1.5px solid var(--mpc-border);
+    border-radius: var(--radius-sm);
+    transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #9CA3AF;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--mpc-blue);
+    box-shadow: 0 0 0 4px rgba(77, 166, 232, 0.15);
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+    background: var(--mpc-bg);
+    cursor: not-allowed;
+    color: var(--mpc-muted);
+}
+
+input[readonly] {
+    background: #F9FAFB;
+    cursor: default;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.6;
+}
+
+input[type="file"] {
+    padding: 8px 12px;
+    font-size: 13px;
+    background: #fff;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    width: auto;
+    height: 18px;
+    margin-right: 6px;
+    vertical-align: middle;
+    cursor: pointer;
+    accent-color: var(--mpc-blue);
+}
+
+/* Select with custom arrow */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    padding-right: 36px;
+}
+
+/* Fieldset */
+fieldset {
+    border: 1px solid var(--mpc-border);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+legend {
+    font-weight: 700;
+    color: var(--mpc-navy);
+    padding: 0 8px;
+    font-size: 14px;
+}
+
+
+/* ============================================================
+   7. BUTTONS
+   ============================================================ */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    font-family: var(--font-ethiopic);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    line-height: 1.4;
+    transition: background var(--t-fast), border-color var(--t-fast), color var(--t-fast), box-shadow var(--t-fast);
+    user-select: none;
+    white-space: nowrap;
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--mpc-blue);
+    outline-offset: 2px;
+}
+
+.btn:disabled,
+.btn[disabled],
+.btn.disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Primary (light blue) */
+.btn-primary {
+    background: var(--mpc-blue);
+    color: #fff;
+    border-color: var(--mpc-blue);
+}
+.btn-primary:hover {
+    background: var(--mpc-blue-dark);
+    border-color: var(--mpc-blue-dark);
+    color: #fff;
+}
+
+/* Navy (dark blue) */
+.btn-navy {
+    background: var(--mpc-navy);
+    color: #fff;
+    border-color: var(--mpc-navy);
+}
+.btn-navy:hover {
+    background: #2A3A85;
+    border-color: #2A3A85;
+    color: #fff;
+}
+
+/* Success (green) */
+.btn-success {
+    background: var(--mpc-success);
+    color: #fff;
+    border-color: var(--mpc-success);
+}
+.btn-success:hover {
+    background: var(--mpc-success-dark);
+    border-color: var(--mpc-success-dark);
+    color: #fff;
+}
+
+/* Danger (red) */
+.btn-danger {
+    background: var(--mpc-red);
+    color: #fff;
+    border-color: var(--mpc-red);
+}
+.btn-danger:hover {
+    background: var(--mpc-red-dark);
+    border-color: var(--mpc-red-dark);
+    color: #fff;
+}
+
+/* Warning (amber) */
+.btn-warning {
+    background: var(--mpc-warning);
+    color: #fff;
+    border-color: var(--mpc-warning);
+}
+.btn-warning:hover {
+    background: var(--mpc-flame-dark);
+    border-color: var(--mpc-flame-dark);
+    color: #fff;
+}
+
+/* Ghost (transparent with border) */
+.btn-ghost {
+    background: transparent;
+    border-color: var(--mpc-border);
+    color: var(--mpc-text);
+}
+.btn-ghost:hover {
+    background: var(--mpc-bg);
+    border-color: var(--mpc-border-strong);
+    color: var(--mpc-navy);
+}
+
+/* Sizes */
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+    gap: 5px;
+}
+.btn-lg {
+    padding: 14px 28px;
+    font-size: 16px;
+}
+
+/* Full width */
+.btn-block {
+    display: flex;
+    width: 100%;
+}
+
+/* Icon-only button */
+.btn-icon {
+    padding: 8px;
+    min-width: 36px;
+    min-height: 36px;
+}
+
+
+/* ============================================================
+   8. TABLES
+   ============================================================ */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    font-size: 14px;
+}
+
+.table th,
+.table td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--mpc-border);
+    vertical-align: middle;
+}
+
+.table th {
+    background: var(--mpc-bg);
+    color: var(--mpc-navy);
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.table tbody tr {
+    transition: background var(--t-fast);
+}
+
+.table tbody tr:hover td {
+    background: #F9FAFB;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Zebra stripe variant (optional) */
+.table-striped tbody tr:nth-child(even) td {
+    background: #FAFBFC;
+}
+
+/* Compact variant */
+.table-compact th,
+.table-compact td {
+    padding: 8px 12px;
+    font-size: 13px;
+}
+
+/* Text alignment helpers for table cells */
+.table th.text-center,
+.table td.text-center { text-align: center; }
+.table th.text-right,
+.table td.text-right { text-align: right; }
+
+@media (max-width: 768px) {
+    .table th,
+    .table td {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+}
+
+
+/* ============================================================
+   9. BADGES & TAGS
+   ============================================================ */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.badge-success   { background: #DCFCE7; color: #166534; }
+.badge-warning   { background: #FEF3C7; color: #92400E; }
+.badge-danger    { background: #FEE2E2; color: #991B1B; }
+.badge-info      { background: #DBEAFE; color: #1E40AF; }
+.badge-primary   { background: #E0E7FF; color: var(--mpc-navy); }
+.badge-secondary { background: #F3F4F6; color: #374151; }
+.badge-navy      { background: var(--mpc-navy); color: #fff; }
+.badge-flame     { background: #FED7AA; color: #9A3412; }
+
+/* Lowercase opt-out */
+.badge-lower {
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+/* Dot indicator badge (for status columns) */
+.badge-dot::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+
+/* ============================================================
+   10. ALERTS (Flash Messages)
+   ============================================================ */
+.alert {
+    padding: 15px 20px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border-left: 4px solid;
+    line-height: 1.5;
+}
+
+.alert-success { background: #ECFDF5; border-color: var(--mpc-success); color: #065F46; }
+.alert-danger  { background: #FEF2F2; border-color: var(--mpc-red);     color: #991B1B; }
+.alert-warning { background: #FFFBEB; border-color: var(--mpc-warning); color: #92400E; }
+.alert-info    { background: #E0F2FE; border-color: #0284C7;            color: #075985; }
+
+.alert-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.7;
+    line-height: 1;
+    padding: 0;
+    flex-shrink: 0;
+    transition: opacity var(--t-fast);
+}
+
+.alert-close:hover { opacity: 1; }
+
+
+/* ============================================================
+   11. PROGRESS BARS
+   ============================================================ */
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #E5E7EB;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: var(--mpc-blue);
+    border-radius: var(--radius-full);
+    transition: width var(--t-slow);
+}
+
+.progress-bar-fill.is-success { background: var(--mpc-success); }
+.progress-bar-fill.is-danger  { background: var(--mpc-red); }
+.progress-bar-fill.is-warning { background: var(--mpc-flame); }
+
+.progress-bar-lg { height: 12px; }
+
+
+/* ============================================================
+   12. WORKFLOW STEPS (Approval Chains)
+   ============================================================ */
+.step-box {
+    border: 1px solid var(--mpc-border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-bottom: 12px;
+    background: #fff;
+    border-left: 4px solid #ccc;
+    transition: box-shadow var(--t-fast);
+}
+
+.step-box:last-child { margin-bottom: 0; }
+
+.step-approved { border-left-color: var(--mpc-success); background: #F0FDF4; }
+.step-rejected { border-left-color: var(--mpc-red);     background: #FEF2F2; }
+.step-pending  { border-left-color: var(--mpc-flame);   background: #FFFBEB; }
+.step-skipped  { border-left-color: #9CA3AF;            background: #F9FAFB; opacity: 0.7; }
+
+.step-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+
+/* ============================================================
+   13. KEY-VALUE LIST
+   Used by: leave_view.php, employee_profile.php, request_view.php
+   Pattern:  <ul class="kv"><li><span>Label</span><b>Value</b></li></ul>
+   ============================================================ */
+.kv {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 13px;
+}
+
+.kv li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px dashed var(--mpc-border);
+    line-height: 1.4;
+}
+
+.kv li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.kv li > span:first-child,
+.kv li .kv-label {
+    color: var(--mpc-muted);
+    flex-shrink: 0;
+}
+
+.kv li > b,
+.kv li > strong,
+.kv li .kv-value {
+    color: var(--mpc-navy);
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+}
+
+
+/* ============================================================
+   14. EMPTY STATE
+   Used by list pages when no records exist
+   ============================================================ */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--mpc-muted);
+}
+
+.empty-state .empty-icon,
+.empty-state .empty-state-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+    display: block;
+    line-height: 1;
+    opacity: 0.75;
+}
+
+.empty-state h3 {
+    color: var(--mpc-navy);
+    font-size: 18px;
+    margin: 0 0 6px;
+}
+
+.empty-state p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--mpc-muted);
+}
+
+
+/* ============================================================
+   15. AVATARS (Initials in a circle)
+   ============================================================ */
+.avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--mpc-flame);
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+.avatar-sm { width: 32px; height: 32px; font-size: 13px; }
+.avatar-lg { width: 56px; height: 56px; font-size: 22px; }
+.avatar-xl { width: 80px; height: 80px; font-size: 32px; }
+
+.avatar-navy  { background: var(--mpc-navy); }
+.avatar-blue  { background: var(--mpc-blue); }
+.avatar-red   { background: var(--mpc-red); }
+
+
+/* ============================================================
+   16. LOGIN PAGE
+   Used by login.php + login.css overrides
+   ============================================================ */
+.login-body {
+    background: linear-gradient(135deg, var(--mpc-navy) 0%, var(--mpc-blue) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Split-screen layout used by current login.php */
+.login-split-left,
+.login-split-right {
+    /* Actual layout is defined in login.php inline styles */
+}
+
+
+/* ============================================================
+   17. PRINTING
+   Modules can add their own @media print blocks on top of this
+   ============================================================ */
+.print-only { display: none; }
+
+@media print {
+    @page { margin: 15mm; }
+
+    html,
+    body {
+        background: #fff !important;
+        color: #000;
+        font-size: 11pt;
+        line-height: 1.5;
+    }
+
+    * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    /* Hide interactive UI */
+    .topbar,
+    .footer,
+    .btn,
+    .no-print,
+    .no-print *,
+    .alert,
+    form .form-actions {
+        display: none !important;
+    }
+
+    /* Show print-only blocks */
+    .print-only { display: block !important; }
+
+    /* Reset page width */
+    .container,
+    .page-container {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Cards flatten */
+    .card {
+        border: 1px solid #ccc !important;
+        padding: 12px !important;
+        margin-bottom: 12px !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* Tables keep borders */
+    .table th,
+    .table td {
+        border: 1px solid #000 !important;
+        padding: 6px 8px !important;
+        font-size: 10pt;
+    }
+
+    .table th {
+        background: #f0f0f0 !important;
+        color: #000 !important;
+    }
+
+    /* Badges go plain */
+    .badge {
+        border: 1px solid #666 !important;
+        background: transparent !important;
+        color: #000 !important;
+    }
+
+    /* Links don't need color */
+    a {
+        color: #000;
+        text-decoration: none;
+    }
+
+    /* Letter paper: no decorations */
+    .letter-paper,
+    .page {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        width: auto !important;
+        min-height: auto !important;
+    }
+
+    /* Muted text stays legible */
+    .muted { color: #444 !important; }
+
+    /* Grids collapse to block */
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+        display: block !important;
+    }
+    .grid-2 > *,
+    .grid-3 > *,
+    .grid-4 > * {
+        margin-bottom: 12px;
+    }
+
+    /* Hide empty states */
+    .empty-state { display: none !important; }
+}
+
+
+/* ============================================================
+   18. UTILITY CLASSES
+   ============================================================ */
+
+/* Text */
+.text-center  { text-align: center; }
+.text-right   { text-align: right; }
+.text-left    { text-align: left; }
+.text-justify { text-align: justify; }
+
+.text-primary { color: var(--mpc-blue); }
+.text-navy    { color: var(--mpc-navy); }
+.text-success { color: var(--mpc-success); }
+.text-warning { color: var(--mpc-warning); }
+.text-danger  { color: var(--mpc-red); }
+.text-info    { color: var(--mpc-info); }
+.text-muted,
+.muted        { color: var(--mpc-muted); }
+
+/* Backgrounds */
+.bg-navy    { background: var(--mpc-navy); }
+.bg-blue    { background: var(--mpc-blue); }
+.bg-white   { background: #fff; }
+.bg-muted   { background: var(--mpc-bg); }
+.bg-success { background: var(--mpc-success); }
+.bg-danger  { background: var(--mpc-red); }
+.bg-warning { background: var(--mpc-warning); }
+
+/* Font sizes */
+.small        { font-size: 12px; }
+.tiny         { font-size: 11px; }
+.fs-lg        { font-size: 18px; }
+.fs-xl        { font-size: 22px; }
+
+/* Font weights */
+.bold      { font-weight: 700; }
+.semibold  { font-weight: 600; }
+.normal    { font-weight: 400; }
+
+/* Margins */
+.mt-0 { margin-top: 0 !important; }    .mt-1 { margin-top: 10px !important; }
+.mt-2 { margin-top: 20px !important; } .mt-3 { margin-top: 30px !important; }
+
+.mb-0 { margin-bottom: 0 !important; }    .mb-1 { margin-bottom: 10px !important; }
+.mb-2 { margin-bottom: 20px !important; } .mb-3 { margin-bottom: 30px !important; }
+
+.ml-1 { margin-left: 10px !important; }
+.mr-1 { margin-right: 10px !important; }
+
+/* Padding */
+.p-0 { padding: 0 !important; }
+.p-1 { padding: 10px !important; }
+.p-2 { padding: 20px !important; }
+.p-3 { padding: 30px !important; }
+
+/* Display */
+.d-none    { display: none !important; }
+.d-block   { display: block !important; }
+.d-inline  { display: inline !important; }
+.d-inline-block { display: inline-block !important; }
+.d-flex    { display: flex !important; }
+.d-inline-flex { display: inline-flex !important; }
+.d-grid    { display: grid !important; }
+
+/* Flex helpers */
+.flex-column  { flex-direction: column; }
+.flex-wrap    { flex-wrap: wrap; }
+.flex-nowrap  { flex-wrap: nowrap; }
+.flex-1       { flex: 1; }
+.items-center { align-items: center; }
+.items-start  { align-items: flex-start; }
+.items-end    { align-items: flex-end; }
+.justify-center  { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-end     { justify-content: flex-end; }
+.gap-1 { gap: 10px; }
+.gap-2 { gap: 20px; }
+
+/* Width */
+.w-full { width: 100%; }
+.w-auto { width: auto; }
+
+/* Border radius */
+.rounded    { border-radius: var(--radius-md); }
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded-lg { border-radius: var(--radius-lg); }
+
+/* Divider */
+.divider {
+    height: 1px;
+    background: var(--mpc-border);
+    border: none;
+    margin: 24px 0;
+}
+
+/* Screen-reader only (accessibility) */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Truncate text */
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   19. SCROLLBAR (subtle, webkit only)
+   ============================================================ */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+}
+
+
+/* ============================================================
+   20. LOGIN PAGE (Base styles — login.css refines these)
+   ============================================================ */
+.logo-big {
+    display: block;
+    margin: 0 auto 20px;
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+
+/* ============================================================
+   END OF FILE
+   ============================================================ */

@@ -1,0 +1,1005 @@
+/* ============================================================
+   MPC-IEMS — MISRAK POLYTECHNIC COLLEGE
+   OFFICIAL DOCUMENT PRINT STYLESHEET
+   ============================================================
+   PURPOSE
+     Canonical print stylesheet for all official documents:
+       - Official letters (letter_print.php)
+       - Clearance certificates (clearance_print.php)
+       - Service certificates (pension, resignation)
+       - Reports (leave_calendar, employee_register, balances)
+       - Employee profiles (employee_profile.php)
+       - Any future printable document
+
+   USAGE
+     <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/print.css" media="print">
+
+   BEHAVIOR
+     - Loads ONLY when printing (media="print")
+     - Screen view unaffected — module-specific preview styles remain in place
+     - Standalone — does not require style.css
+     - A4 default; override with @page if Letter size needed
+
+   MIGRATION
+     Each print template currently has its own <style> block with
+     @media print rules. Replace those with a <link> to this file.
+     See "MIGRATION" section at the bottom of this file for exact steps.
+   ============================================================ */
+
+
+/* ============================================================
+   1. PAGE SETUP
+   A4 portrait, 15mm margins, no browser headers/footers
+   ============================================================ */
+@page {
+    size: A4 portrait;
+    margin: 15mm;
+
+    /* Suppress browser-generated headers/footers (Chrome / Edge / Safari) */
+    @top-left    { content: ""; }
+    @top-center  { content: ""; }
+    @top-right   { content: ""; }
+    @bottom-left { content: ""; }
+    @bottom-center { content: ""; }
+    @bottom-right { content: ""; }
+}
+
+/* Landscape variant — add class="landscape" on <html> to activate */
+@page landscape {
+    size: A4 landscape;
+    margin: 12mm;
+}
+
+html.landscape {
+    /* Marker class — paired with the @page above */
+}
+
+
+/* ============================================================
+   2. BASE RESET FOR PRINT
+   ============================================================ */
+@media print {
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        color-adjust: exact;
+    }
+
+    html,
+    body {
+        background: #fff !important;
+        color: #000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 12pt;
+        line-height: 1.5;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* Remove all shadows and glows — they waste toner */
+    * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+        outline: none !important;
+    }
+
+    /* Remove all background gradients */
+    body,
+    section,
+    div,
+    header,
+    footer,
+    main,
+    aside,
+    article {
+        background-image: none !important;
+    }
+
+    /* Ensure images scale inside A4 */
+    img,
+    svg {
+        max-width: 100% !important;
+        height: auto !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* Headings keep hierarchy but reduce size for print */
+    h1 { font-size: 18pt; }
+    h2 { font-size: 15pt; }
+    h3 { font-size: 13pt; }
+    h4 { font-size: 12pt; }
+
+    /* Remove decorative underlines from headings */
+    h1, h2, h3, h4, h5, h6 {
+        color: #000 !important;
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+
+/* ============================================================
+   3. HIDE INTERACTIVE / SCREEN-ONLY ELEMENTS
+   ============================================================ */
+
+    /* Navigation & chrome */
+    .topbar,
+    .topbar-inner,
+    .nav,
+    .user-controls,
+    .user-dropdown,
+    .notif-bell,
+    .notif-badge,
+    .date-widget,
+    .dropdown-content,
+    .footer,
+    footer.site-footer,
+    nav,
+    aside,
+    .sidebar,
+
+    /* Interactive controls */
+    .btn,
+    .btn-sm,
+    .btn-lg,
+    .btn-primary,
+    .btn-navy,
+    .btn-success,
+    .btn-danger,
+    .btn-ghost,
+    .btn-warning,
+    .btn-block,
+    .btn-icon,
+    .btn-submit,
+    button,
+    input[type="submit"],
+    input[type="button"],
+    input[type="reset"],
+    select,
+    textarea,
+    input[type="file"],
+    input[type="checkbox"],
+    input[type="radio"],
+    .toggle-password,
+    .alert-close,
+    .dev-panel,
+    .dev-tags,
+
+    /* Informational only on screen */
+    .alert,
+    .no-print,
+    .no-print *,
+    .print-hidden,
+    .empty-state,
+
+    /* Sidebar dropdowns and modals */
+    .modal,
+    .modal-backdrop,
+    .toast,
+    .tooltip,
+
+    /* Pagination */
+    .pagination,
+    .pager {
+        display: none !important;
+    }
+
+
+/* ============================================================
+   4. SHOW PRINT-ONLY ELEMENTS
+   ============================================================ */
+
+    .print-only,
+    .print-only *,
+    .print-block {
+        display: block !important;
+    }
+
+    .print-inline {
+        display: inline !important;
+    }
+
+    .print-flex {
+        display: flex !important;
+    }
+
+
+/* ============================================================
+   5. LAYOUT COLLAPSE
+   Grids and multi-column layouts become single column
+   ============================================================ */
+
+    .grid,
+    .grid-2,
+    .grid-3,
+    .grid-4,
+    .d-grid {
+        display: block !important;
+    }
+
+    .grid-2 > *,
+    .grid-3 > *,
+    .grid-4 > * {
+        margin-bottom: 12pt;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* Preserve flex where explicitly needed */
+    .print-flex,
+    .print-flex > * {
+        display: flex !important;
+    }
+
+    /* Container resets */
+    .container,
+    .page-container,
+    .page-wrapper,
+    main,
+    .main-content {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+
+/* ============================================================
+   6. CARDS
+   Flatten to bordered boxes with no shadow
+   ============================================================ */
+
+    .card,
+    .panel,
+    .box,
+    .widget {
+        background: #fff !important;
+        border: 1px solid #ccc !important;
+        border-left: 1px solid #ccc !important;
+        border-radius: 0 !important;
+        padding: 8pt 10pt !important;
+        margin-bottom: 10pt !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .card:last-child {
+        margin-bottom: 0 !important;
+    }
+
+    /* Card headers */
+    .card h2,
+    .card h3 {
+        margin-top: 0 !important;
+        margin-bottom: 6pt !important;
+        padding-bottom: 4pt !important;
+        border-bottom: 1px solid #999 !important;
+    }
+
+
+/* ============================================================
+   7. TABLES
+   Preserve borders for data readability
+   ============================================================ */
+
+    .table,
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        font-size: 10pt;
+        page-break-inside: auto;
+        break-inside: auto;
+    }
+
+    .table th,
+    .table td,
+    table th,
+    table td {
+        border: 1px solid #000 !important;
+        padding: 5pt 7pt !important;
+        text-align: left;
+        vertical-align: top;
+        color: #000 !important;
+        background: transparent !important;
+    }
+
+    .table th,
+    table th {
+        background: #f0f0f0 !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 9pt;
+        letter-spacing: 0.3pt;
+    }
+
+    /* Table rows must not break mid-row */
+    .table tr,
+    table tr {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* Repeat table header on each page */
+    .table thead,
+    table thead {
+        display: table-header-group;
+    }
+
+    .table tfoot,
+    table tfoot {
+        display: table-footer-group;
+    }
+
+    /* Remove hover effects */
+    .table tbody tr:hover td,
+    table tbody tr:hover td {
+        background: transparent !important;
+    }
+
+    /* Responsive wrapper becomes plain */
+    .table-responsive {
+        overflow: visible !important;
+    }
+
+
+/* ============================================================
+   8. BADGES
+   Flatten to plain text with border — keeps status readable
+   ============================================================ */
+
+    .badge {
+        display: inline !important;
+        padding: 1pt 5pt !important;
+        border: 1px solid #666 !important;
+        border-radius: 2pt !important;
+        background: transparent !important;
+        color: #000 !important;
+        font-size: 9pt !important;
+        font-weight: 600 !important;
+        text-transform: capitalize !important;
+        letter-spacing: 0 !important;
+    }
+
+    .badge::before {
+        display: none !important;
+    }
+
+
+/* ============================================================
+   9. TYPOGRAPHY
+   ============================================================ */
+
+    p {
+        margin: 0 0 8pt 0;
+        orphans: 3;
+        widows: 3;
+    }
+
+    strong,
+    b {
+        font-weight: 700;
+    }
+
+    a {
+        color: #000 !important;
+        text-decoration: none !important;
+    }
+
+    /* Show URL after external links (optional — disable if too noisy) */
+    a[href^="http"]:not([href*="misrak.edu.et"])::after {
+        content: " (" attr(href) ")";
+        font-size: 8pt;
+        color: #555;
+        font-weight: normal;
+    }
+
+    code {
+        background: #f5f5f5 !important;
+        border: 1px solid #ddd;
+        padding: 1pt 4pt;
+        font-family: 'Courier New', monospace;
+        font-size: 10pt;
+        color: #000 !important;
+    }
+
+    .muted,
+    .text-muted {
+        color: #444 !important;
+    }
+
+    .small,
+    .tiny {
+        font-size: 9pt !important;
+    }
+
+    /* Horizontal rules */
+    hr {
+        border: none !important;
+        border-top: 1px solid #000 !important;
+        margin: 10pt 0 !important;
+    }
+
+
+/* ============================================================
+   10. LETTER PAPER COMPONENT
+   Used by letter_print.php, clearance_print.php, and any
+   document that should look like an official A4 sheet
+   ============================================================ */
+
+    .page,
+    .letter-paper,
+    .document-page {
+        background: #fff !important;
+        width: auto !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        position: relative;
+        page-break-after: always;
+        break-after: page;
+    }
+
+    .page:last-child,
+    .letter-paper:last-child,
+    .document-page:last-child {
+        page-break-after: auto;
+        break-after: auto;
+    }
+
+    /* Legacy clearance_print.php paper */
+    .letter-paper {
+        padding: 0 !important;
+        font-family: 'Times New Roman', Times, serif !important;
+    }
+
+    /* Letter body */
+    .letter-body,
+    .body-content {
+        white-space: pre-wrap !important;
+        text-align: justify !important;
+        font-size: 12pt !important;
+        line-height: 1.7 !important;
+        color: #000 !important;
+    }
+
+    /* Letter header block (used by clearance_print.php) */
+    .letter-head {
+        text-align: center !important;
+        border-bottom: 2px solid #1B2A6B !important;
+        padding-bottom: 12pt !important;
+        margin-bottom: 18pt !important;
+    }
+
+    .letter-head h1 {
+        font-size: 18pt !important;
+        color: #1B2A6B !important;
+        margin: 0 !important;
+    }
+
+    .letter-head h2 {
+        font-size: 13pt !important;
+        color: #2C7FC9 !important;
+        margin: 4pt 0 !important;
+    }
+
+    .letter-head p {
+        font-size: 10pt !important;
+        margin: 2pt 0 !important;
+    }
+
+
+/* ============================================================
+   11. OFFICIAL LETTERHEAD TABLE
+   The bordered header table used by letter_print.php
+   (Company Name | Document No | Memo No | Page No)
+   ============================================================ */
+
+    table.header-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        border: 2px solid #000 !important;
+        margin-bottom: 18pt !important;
+    }
+
+    table.header-table td {
+        border: 1px solid #000 !important;
+        padding: 4pt 6pt !important;
+        vertical-align: middle !important;
+    }
+
+    .logo-cell {
+        width: 25mm !important;
+        text-align: center !important;
+    }
+
+    .logo-cell img {
+        width: 20mm !important;
+        height: auto !important;
+    }
+
+    .org-cell {
+        text-align: center !important;
+    }
+
+    .org-cell .label,
+    .doc-cell .label,
+    .title-row .label {
+        font-size: 8pt !important;
+        text-align: left !important;
+        display: block !important;
+        font-family: Arial, sans-serif !important;
+        margin-bottom: 1pt !important;
+    }
+
+    .org-cell .name-am {
+        font-size: 15pt !important;
+        font-weight: 700 !important;
+        font-family: 'Nyala', 'Abyssinica SIL', 'Noto Sans Ethiopic', sans-serif !important;
+        line-height: 1.15 !important;
+    }
+
+    .org-cell .name-en {
+        font-size: 11pt !important;
+        font-weight: 700 !important;
+        font-family: Arial, sans-serif !important;
+        margin-top: 2pt !important;
+    }
+
+    .doc-cell {
+        text-align: center !important;
+        width: 40mm !important;
+    }
+
+    .doc-cell .value {
+        font-size: 10pt !important;
+        font-weight: 700 !important;
+        font-family: Arial, sans-serif !important;
+    }
+
+    .title-row td {
+        text-align: center !important;
+        padding: 4pt !important;
+    }
+
+    .title-row .value {
+        font-size: 10pt !important;
+        font-weight: 700 !important;
+        font-family: Arial, sans-serif !important;
+        line-height: 1.25 !important;
+    }
+
+    .page-num-row {
+        text-align: right !important;
+        font-size: 9pt !important;
+        font-weight: 700 !important;
+        font-family: Arial, sans-serif !important;
+    }
+
+
+/* ============================================================
+   12. LETTER BODY ELEMENTS
+   To / From / Subject / Reference / Date / Signature
+   ============================================================ */
+
+    .ref-date {
+        text-align: right !important;
+        margin: 15pt 0 !important;
+        font-size: 11pt !important;
+        line-height: 1.8 !important;
+        font-family: 'Nyala', 'Abyssinica SIL', 'Noto Sans Ethiopic', serif !important;
+    }
+
+    .to-section {
+        margin-bottom: 15pt !important;
+        font-size: 11pt !important;
+        line-height: 1.6 !important;
+        font-family: 'Nyala', 'Abyssinica SIL', 'Noto Sans Ethiopic', serif !important;
+    }
+
+    .subject {
+        font-weight: 700 !important;
+        text-decoration: underline !important;
+        margin-bottom: 15pt !important;
+        font-size: 11pt !important;
+        line-height: 1.6 !important;
+        font-family: 'Nyala', 'Abyssinica SIL', 'Noto Sans Ethiopic', serif !important;
+    }
+
+    .signature {
+        margin-top: 30pt !important;
+        font-size: 11pt !important;
+        font-family: 'Nyala', 'Abyssinica SIL', 'Noto Sans Ethiopic', serif !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .signature p {
+        margin: 0 !important;
+    }
+
+    .signature strong {
+        font-weight: 700 !important;
+    }
+
+
+/* ============================================================
+   13. OFFICIAL DOCUMENT FOOTER
+   Bottom of the page — phone, email, address, ISO logo
+   ============================================================ */
+
+    .footer-info {
+        margin-top: 20pt !important;
+        padding-top: 8pt !important;
+        border-top: 1px solid #999 !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+        font-size: 8pt !important;
+        font-family: Arial, sans-serif !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .footer-text {
+        line-height: 1.5 !important;
+    }
+
+    .footer-text p {
+        margin: 0 !important;
+        font-size: 8pt !important;
+    }
+
+    .iso-logo {
+        width: 30mm !important;
+        height: auto !important;
+    }
+
+    /* Absolute-positioned footer (legacy letter_print.php) */
+    .page .footer-info.positioned,
+    .letter-paper .footer-info.positioned {
+        position: absolute !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+    }
+
+
+/* ============================================================
+   14. PRINT HEADER (for reports)
+   The report title block used by leave_calendar.php,
+   employee_register.php, balances.php
+   ============================================================ */
+
+    .print-header {
+        text-align: center !important;
+        margin-bottom: 15pt !important;
+        padding-bottom: 10pt !important;
+        border-bottom: 2px solid #000 !important;
+    }
+
+    .print-header h2 {
+        font-size: 16pt !important;
+        color: #000 !important;
+        margin: 0 !important;
+    }
+
+    .print-header h3 {
+        font-size: 12pt !important;
+        margin: 3pt 0 !important;
+    }
+
+    .print-header p {
+        font-size: 9pt !important;
+        color: #333 !important;
+        margin: 2pt 0 !important;
+    }
+
+
+/* ============================================================
+   15. PAGE BREAK UTILITIES
+   Apply these classes to control where pages split
+   ============================================================ */
+
+    /* Force a new page before this element */
+    .page-break,
+    .page-break-before,
+    .break-before-page {
+        page-break-before: always !important;
+        break-before: page !important;
+    }
+
+    /* Force a new page after this element */
+    .page-break-after,
+    .break-after-page {
+        page-break-after: always !important;
+        break-after: page !important;
+    }
+
+    /* Never split this block across pages */
+    .avoid-break,
+    .avoid-break-inside,
+    .no-break,
+    .keep-together {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    /* Keep this element with the one that follows it */
+    .keep-with-next {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+    }
+
+    /* Keep this element with the one before it */
+    .keep-with-previous {
+        page-break-before: avoid !important;
+        break-before: avoid !important;
+    }
+
+    /* Hide this element on all but the first printed page */
+    .no-print-after-first {
+        display: none !important;
+    }
+
+    /* Show on all pages except the first */
+    .only-after-first {
+        display: none !important;
+    }
+    .only-after-first + * .page:first-child .only-after-first {
+        display: block !important;
+    }
+
+
+/* ============================================================
+   16. TWO-COLUMN DOCUMENTS
+   employee_profile.php uses grid-2 with sidebar
+   ============================================================ */
+
+    .grid-2.print-two-col {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 15pt !important;
+    }
+
+    /* Signature blocks in two columns */
+    .signature-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 30pt !important;
+        margin-top: 40pt !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .signature-grid > div {
+        text-align: center;
+    }
+
+    .signature-grid .signature-line {
+        border-top: 1px solid #000;
+        margin-top: 30pt;
+        padding-top: 4pt;
+        font-size: 10pt;
+    }
+
+
+/* ============================================================
+   17. WATERMARK SUPPORT
+   Add class="watermark-container" to the page
+   Add class="watermark" with the text (e.g., "DRAFT")
+   ============================================================ */
+
+    .watermark-container {
+        position: relative;
+    }
+
+    .watermark {
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) rotate(-45deg) !important;
+        font-size: 80pt !important;
+        font-weight: 900 !important;
+        color: rgba(200, 200, 200, 0.35) !important;
+        letter-spacing: 8pt !important;
+        text-transform: uppercase !important;
+        pointer-events: none !important;
+        user-select: none !important;
+        z-index: 1 !important;
+        white-space: nowrap !important;
+    }
+
+
+/* ============================================================
+   18. PRINT COLOR PRESERVATION
+   Ensures color logos and images print correctly even when
+   "background graphics" is off in the browser dialog
+   ============================================================ */
+
+    /* Preserve logos and images with color */
+    .logo-cell img,
+    .letter-head img,
+    .branding-content img,
+    .hero-logo,
+    img[src*="logo"] {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    /* Preserve official document borders */
+    table.header-table,
+    table.header-table td {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+
+/* ============================================================
+   19. MODULE-SPECIFIC OVERRIDES
+   Additional tuning for templates with unique layouts
+   ============================================================ */
+
+    /* ---- leave_calendar.php ---- */
+    .calendar-print .print-header {
+        display: block !important;
+    }
+
+    /* ---- balances.php ---- */
+    .balances-print .badge {
+        border: 1px solid #000 !important;
+    }
+
+    /* ---- employee_profile.php ---- */
+    .profile-print .avatar {
+        width: 60pt !important;
+        height: 60pt !important;
+        font-size: 20pt !important;
+        background: transparent !important;
+        border: 2px solid #1B2A6B !important;
+        color: #1B2A6B !important;
+        margin: 0 auto 10pt !important;
+    }
+
+    /* ---- clearance_print.php ---- */
+    .clearance-print .letter-head {
+        border-bottom: 2px solid #1B2A6B !important;
+    }
+
+    /* ---- Pension service certificate (future) ---- */
+    .certificate-print .certificate-body {
+        font-size: 13pt !important;
+        line-height: 1.9 !important;
+        text-align: justify !important;
+    }
+
+
+/* ============================================================
+   20. FINAL CLEANUP
+   ============================================================ */
+
+    /* Remove animations — no meaning in print */
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    /* Prevent orphaned section headers */
+    section > h1:first-child,
+    section > h2:first-child,
+    section > h3:first-child,
+    article > h1:first-child,
+    article > h2:first-child,
+    article > h3:first-child {
+        page-break-before: avoid !important;
+        break-before: avoid !important;
+    }
+
+    /* Last-page whitespace reduction */
+    body > main:last-child,
+    body > .container:last-child {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+} /* end @media print */
+
+
+/* ============================================================
+   MIGRATION NOTES
+   ============================================================
+   HOW TO USE THIS FILE IN YOUR PRINT TEMPLATES
+
+   Before (per-module inline styles):
+     <style>
+       @media print {
+         body { background: #fff; font-size: 12px; }
+         .topbar, .footer, .btn { display: none !important; }
+         .table th, .table td { border: 1px solid #000 !important; }
+       }
+     </style>
+
+   After (link to this shared stylesheet):
+     <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/print.css" media="print">
+
+   ────────────────────────────────────────────────────────────
+
+   FILES TO MIGRATE (in order of impact):
+
+     1. letter_print.php
+        - DELETE the inline <style> block (lines ~25-150)
+        - ADD: <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/print.css" media="print">
+        - ADD: <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/style.css">
+          (needed for screen preview)
+        - Body: add class="letter-print"
+        - The .page div: add class="page" (already there — good)
+        - The .header-table: add class="header-table" (already there)
+        - The .footer-info: add class="footer-info" (already there)
+        Result: file drops from ~280 lines to ~120 lines
+
+     2. clearance_print.php
+        - DELETE inline <style> block
+        - ADD: <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/print.css" media="print">
+        - Body class: add "clearance-print"
+        - .letter-paper div: add class="letter-paper"
+        - .letter-head div: add class="letter-head"
+        Result: cleaner print output, correct A4 margins
+
+     3. leave_calendar.php
+        - KEEP the existing inline styles for screen (they style the table UI)
+        - ADD: <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/print.css" media="print">
+        - DELETE the inline @media print { } block
+        - .print-only div: keep (this file shows it)
+        - Add class="calendar-print" to <body>
+        Result: unified print styling, "Leave Calendar Report" header preserved
+
+     4. employee_register.php
+        - Same pattern as leave_calendar.php
+        - Add class="register-print" to <body>
+        - .print-only div: keep
+
+     5. balances.php
+        - Same pattern
+        - Add class="balances-print" to <body>
+
+     6. employee_profile.php
+        - Same pattern
+        - Add class="profile-print" to <body>
+        - The .avatar will print as a bordered circle (per section 19)
+
+   ────────────────────────────────────────────────────────────
+
+   REQUIRED HTML ADDITIONS
+
+   Add this ONE line inside <head> of every print template:
+
+     <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/print.css" media="print">
+
+   The `media="print"` attribute means:
+     - Browser does NOT download this file on normal page load
+     - Browser DOES apply it when user hits Ctrl+P
+     - No impact on screen rendering
+     - No performance cost
+
+   ────────────────────────────────────────────────────────────
+
+   HOW TO TEST WITHOUT CHANGING ANY FILE
+
+   Add this line temporarily to any print page's <head>:
+
+     <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/print.css" media="screen">
+
+   Then hit Ctrl+P — the print preview will show the new styling.
+   If it looks good, change `media="screen"` to `media="print"` and
+   delete the module's own @media print block.
+
+   ============================================================ */

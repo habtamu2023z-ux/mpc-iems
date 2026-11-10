@@ -1,0 +1,150 @@
+# ============================================================
+# MPC-IEMS — MISRAK POLYTECHNIC COLLEGE
+# Crawler Policy (robots.txt)
+# ============================================================
+# This is a HINT for well-behaved bots. It is NOT security.
+# Real access control lives in .htaccess.
+# ============================================================
+
+
+# ------------------------------------------------------------
+# 1. GLOBAL DEFAULT — allow nothing by default
+# ------------------------------------------------------------
+# Start from "deny all", then explicitly allow the few public pages.
+# Safer than the reverse: a new module added tomorrow is private
+# by default rather than accidentally exposed.
+User-agent: *
+Disallow: /
+
+
+# ------------------------------------------------------------
+# 2. SEARCH ENGINE BOTS — allow only the public landing page
+# ------------------------------------------------------------
+User-agent: Googlebot
+User-agent: Bingbot
+User-agent: DuckDuckBot
+User-agent: Slurp
+User-agent: Baiduspider
+User-agent: YandexBot
+User-agent: Sogou
+User-agent: Exabot
+User-agent: facebot
+User-agent: ia_archiver
+
+# Only the public landing page (index.php when not logged in)
+Allow: /$
+Allow: /index.php$
+Allow: /assets/
+Allow: /assets/img/
+Allow: /assets/css/
+Allow: /assets/js/
+
+# Everything below is private. Explicit for clarity.
+Disallow: /admin/
+Disallow: /api/
+Disallow: /backups/
+Disallow: /docs/
+Disallow: /includes/
+Disallow: /logs/
+Disallow: /modules/
+Disallow: /reports/
+Disallow: /tests/
+Disallow: /uploads/
+Disallow: /vendor/
+
+# Auth pages — no reason for these to appear in search
+Disallow: /login.php
+Disallow: /logout.php
+Disallow: /notifications.php
+
+# Never index these files directly
+Disallow: /config.php
+Disallow: /functions.php
+Disallow: /*.sql$
+Disallow: /*.log$
+Disallow: /*.md$
+Disallow: /.env*
+Disallow: /composer.*
+Disallow: /package*.json
+
+Crawl-delay: 10
+
+
+# ------------------------------------------------------------
+# 3. AI / LLM CRAWLERS — disallow entirely
+# ------------------------------------------------------------
+# These bots scrape to train models. This app contains student
+# records and employee data. Do not feed it.
+User-agent: GPTBot
+User-agent: ChatGPT-User
+User-agent: CCBot
+User-agent: anthropic-ai
+User-agent: Claude-Web
+User-agent: ClaudeBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: PerplexityBot
+User-agent: FacebookBot
+User-agent: meta-externalagent
+Disallow: /
+
+
+# ------------------------------------------------------------
+# 4. SCRAPERS & SEO SPAM — disallow entirely
+# ------------------------------------------------------------
+User-agent: AhrefsBot
+User-agent: SemrushBot
+User-agent: MJ12bot
+User-agent: DotBot
+User-agent: PetalBot
+User-agent: Bytespider
+User-agent: DataForSeoBot
+User-agent: BLEXBot
+Disallow: /
+
+
+# ------------------------------------------------------------
+# 5. ARCHIVERS — disallow entirely
+# ------------------------------------------------------------
+# Institutional records should not end up in the Wayback Machine.
+User-agent: ia_archiver
+User-agent: Wayback Machine
+Disallow: /
+
+
+# ------------------------------------------------------------
+# 6. POLITE VACUUM CLEANERS — allow but heavily throttle
+# ------------------------------------------------------------
+User-agent: UptimeRobot
+User-agent: Pingdom
+User-agent: StatusCake
+Allow: /
+Crawl-delay: 60
+
+
+# ------------------------------------------------------------
+# 7. NOINDEX INSTRUCTIONS FOR COMMON CRAWLERS
+# ------------------------------------------------------------
+# Note: robots.txt cannot inject <meta> tags. The header.php
+# template conditionally emits the meta tag below for pages
+# that should never be indexed. See header.php for the block:
+#
+#   <meta name="robots" content="noindex, nofollow">
+#
+# That is authoritative; this file is only advisory.
+
+
+# ------------------------------------------------------------
+# 8. SITEMAP REFERENCE
+# ------------------------------------------------------------
+# There is only ONE public page — the landing page. A sitemap
+# is not worth generating until you add a public "About" page,
+# "News" page, or similar. When you do, add a sitemap.xml at
+# the project root and uncomment the line below:
+#
+# Sitemap: https://misrak.edu.et/sitemap.xml
+
+
+# ------------------------------------------------------------
+# END OF FILE
+# ------------------------------------------------------------
